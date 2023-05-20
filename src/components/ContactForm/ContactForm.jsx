@@ -9,7 +9,7 @@ class ContactForm extends Component {
   };
 
   static propTypes = {
-    handleSubmit: PropTypes.func.isRequired,
+    addContact: PropTypes.func.isRequired,
   };
 
   handleChange = event => {
@@ -17,12 +17,20 @@ class ContactForm extends Component {
     this.setState({ [name]: value });
   };
 
+  handleSubmit = event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    this.props.addContact(this.state);
+    form.reset();
+  };
+
   render() {
     return (
-      <form onSubmit={this.props.handleSubmit} className={css.form}>
+      <form onSubmit={this.handleSubmit} className={css.form}>
         <label className={css.label}>
           Name
           <input
+            onChange={this.handleChange}
             type="text"
             name="name"
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -33,6 +41,7 @@ class ContactForm extends Component {
         <label className={css.label}>
           Number
           <input
+            onChange={this.handleChange}
             type="tel"
             name="number"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"

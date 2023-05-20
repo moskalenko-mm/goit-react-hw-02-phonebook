@@ -11,25 +11,21 @@ class App extends Component {
     filter: '',
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
-    const { name, number } = event.target.elements;
+  addContact = ({ name, number }) => {
     const { contacts } = this.state;
-    const form = event.currentTarget;
 
-    if (contacts.find(item => item.name === name.value)) {
-      return alert(`Contact "${name.value}" is already in contacts list`);
+    if (contacts.find(item => item.name.toLowerCase() === name.toLowerCase())) {
+      return alert(`Contact "${name}" is already in contacts list`);
     }
 
-    const addContact = {
+    const contact = {
       id: nanoid(),
-      name: name.value,
-      number: number.value,
+      name,
+      number,
     };
     this.setState(prevState => {
-      return { contacts: [addContact, ...prevState.contacts] };
+      return { contacts: [contact, ...prevState.contacts] };
     });
-    form.reset();
   };
 
   handleSearch = event => {
@@ -50,13 +46,14 @@ class App extends Component {
     return (
       <Container>
         <h1>Phonebook</h1>
-        <ContactForm handleSubmit={this.handleSubmit}></ContactForm>
+        <ContactForm addContact={this.addContact} />
         <h2>Contacts</h2>
-        <Filter handelSearch={this.handleSearch}></Filter>
+        <Filter handelSearch={this.handleSearch} />
         <ContactList
           contacts={filteredContacts}
           handleClick={this.handleClick}
-        ></ContactList>
+          filter={filter}
+        />
       </Container>
     );
   }
