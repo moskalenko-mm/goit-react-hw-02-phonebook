@@ -33,8 +33,9 @@ class App extends Component {
   };
 
   handleClick = id => {
-    const { contacts } = this.state;
-    this.setState({ contacts: contacts.filter(item => item.id !== id) });
+    this.setState(prevState => {
+      return { contacts: prevState.contacts.filter(item => item.id !== id) };
+    });
   };
 
   render() {
@@ -52,7 +53,6 @@ class App extends Component {
         <ContactList
           contacts={filteredContacts}
           handleClick={this.handleClick}
-          filter={filter}
         />
       </Container>
     );
